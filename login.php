@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Login Page V10 | Colorlib</title>
+  <title>Login Page</title>
   
-  	<link rel="stylesheet" href="css/style.css">
+  	<link rel="stylesheet" href="css/loginstyle.css">
 </head>
 <body>
   <main class="cl-login10-demo">
@@ -14,8 +14,8 @@
         <span class="cl-login10__logo" aria-hidden="true">
           <svg viewBox="0 0 32 32" width="32" height="32"><circle cx="16" cy="16" r="16" fill="#18181b"/><path d="M10 16a6 6 0 1 1 6 6" fill="none" stroke="#c4b5fd" stroke-width="3.2" stroke-linecap="round"/><circle cx="16" cy="22" r="2.4" fill="#fda4af"/></svg>
         </span>
-        <p class="cl-login10__brand">Loop</p>
-        <p class="cl-login10__tagline">Small habits, tracked kindly.</p>
+        <p class="cl-login10__brand">Student Consultation Booking System</p>
+        <p class="cl-login10__tagline">Consult your professors anytime, anywhere.</p>
       </header>
 
       <div class="cl-login10__tabs" role="tablist" aria-label="Log in or create an account" data-tablist>
@@ -27,9 +27,9 @@
       <div class="cl-login10__panels">
         <div class="cl-login10__panel" role="tabpanel" id="cl-login10-panel-login" aria-labelledby="cl-login10-tab-login" tabindex="0">
           <form class="cl-login10__form" data-form="login" novalidate>
-            <h1 class="cl-login10__title">Welcome back</h1>
+            <h1 class="cl-login10__title">Welcome</h1>
             <div class="cl-login10__field" data-field>
-              <label class="cl-login10__label" for="cl-login10-l-email">Email</label>
+              <label class="cl-login10__label" for="cl-login10-l-email">Username</label>
               <input class="cl-login10__input" id="cl-login10-l-email" name="email" type="email" autocomplete="username" required data-msg="Enter your email." aria-describedby="cl-login10-l-email-err">
               <p class="cl-login10__error" id="cl-login10-l-email-err" data-error></p>
             </div>
