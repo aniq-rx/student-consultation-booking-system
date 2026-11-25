@@ -1,17 +1,101 @@
+
 <?php
 session_start();
-include 'db_connect.php';
+
+include "db_connect.php";
 
 $message = "";
-$toastClass = "";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+// Redirect if already logged in
+if (isset($_SESSION['studentID'])) {
+    header("Location: student/dashboard.php");
+    exit();
 }
 
+if (isset($_SESSION['lecturerID'])) {
+    header("Location: lecturer/dashboard.php");
+    exit();
+}
+
+
+// LOGIN PROCESS
+if ($_SERVER["REQUEST_METHOD"] == "POST" &&
+    isset($_POST['form_type']) &&
+    $_POST['form_type'] == "login") {
+
+    $username = trim($_POST['username']);
+    $password = $_POST['password'];
+
+
+    // CHECK STUDENTS TABLE
+    $sql_student = "SELECT * FROM students WHERE username = ?";
+    $stmt_student = mysqli_prepare($conn, $sql_student);
+
+    mysqli_stmt_bind_param($stmt_student, "s", $username);
+    mysqli_stmt_execute($stmt_student);
+
+    $result_student = mysqli_stmt_get_result($stmt_student);
+    $student = mysqli_fetch_assoc($result_student);
+
+    mysqli_stmt_close($stmt_student);
+
+
+    // CHECK LECTURERS TABLE
+    $sql_lecturer = "SELECT * FROM lecturers WHERE username = ?";
+    $stmt_lecturer = mysqli_prepare($conn, $sql_lecturer);
+
+    mysqli_stmt_bind_param($stmt_lecturer, "s", $username);
+    mysqli_stmt_execute($stmt_lecturer);
+
+    $result_lecturer = mysqli_stmt_get_result($stmt_lecturer);
+    $lecturer = mysqli_fetch_assoc($result_lecturer);
+
+    mysqli_stmt_close($stmt_lecturer);
+
+
+    // CHECK USER ACCOUNT AND PASSWORD
+
+    if ($student && $lecturer) {
+
+        $message = "Duplicate username. Please contact administrator.";
+
+    }
+
+    // STUDENT LOGIN
+    elseif ($student && $password === $student['password']) {
+
+        session_regenerate_id(true);
+
+        $_SESSION['studentID'] = $student['studentID'];
+        $_SESSION['student_name'] = $student['full_name'];
+
+        header("Location:  student/dashboard.php");
+        exit();
+
+    }
+
+    // LECTURER LOGIN
+    elseif ($lecturer && $password === $lecturer['password']) {
+
+        session_regenerate_id(true);
+
+        $_SESSION['lecturerID'] = $lecturer['lecturerID'];
+        $_SESSION['lecturer_name'] = $lecturer['full_name'];
+
+        header("Location:  lecturer/dashboard.php");
+        exit();
+
+    }
+
+    else {
+
+        $message = "Invalid username or password.";
+
+    }
+}
 ?>
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -29,7 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <svg viewBox="0 0 32 32" width="32" height="32"><circle cx="16" cy="16" r="16" fill="#18181b"/><path d="M10 16a6 6 0 1 1 6 6" fill="none" stroke="#c4b5fd" stroke-width="3.2" stroke-linecap="round"/><circle cx="16" cy="22" r="2.4" fill="#fda4af"/></svg>
         </span>
         <p class="cl-login10__brand">Student Consultation Booking System</p>
-        <p class="cl-login10__tagline">Consult your professors anytime, anywhere.</p>
+        <p class="cl-login10__tagline">Consult your lecturers anytime, anywhere.</p>
       </header>
 
       <div class="cl-login10__tabs" role="tablist" aria-label="Log in or create an account" data-tablist>
@@ -40,11 +124,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       <div class="cl-login10__panels">
         <div class="cl-login10__panel" role="tabpanel" id="cl-login10-panel-login" aria-labelledby="cl-login10-tab-login" tabindex="0">
-          <form class="cl-login10__form" data-form="login" novalidate>
+          <form class="cl-login10__form" method="post" action="index.php">
+            <?php if ($message !== ""): ?>
+              <p class="cl-login10__error" role="status"><?= $message ?></p>
+            <?php endif; ?>
+            <input type="hidden" name="form_type" value="login">
             <h1 class="cl-login10__title">Welcome</h1>
             <div class="cl-login10__field" data-field>
               <label class="cl-login10__label" for="cl-login10-l-email">Username</label>
-              <input class="cl-login10__input" id="cl-login10-l-email" name="email" type="email" autocomplete="username" required data-msg="Enter your email." aria-describedby="cl-login10-l-email-err">
+              <input class="cl-login10__input" id="cl-login10-l-email" name="username" type="text" autocomplete="username" required data-msg="Enter your username." aria-describedby="cl-login10-l-email-err">
               <p class="cl-login10__error" id="cl-login10-l-email-err" data-error></p>
             </div>
             <div class="cl-login10__field" data-field>
@@ -53,7 +141,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <a class="cl-login10__link" href="#">Forgot it?</a>
               </div>
               <div class="cl-login10__pw">
-                <input class="cl-login10__input" id="cl-login10-l-pw" name="password" type="password" autocomplete="current-password" required minlength="8" data-msg="Enter your password." aria-describedby="cl-login10-l-pw-err">
+                <input class="cl-login10__input" id="cl-login10-l-pw" name="password" type="password" autocomplete="current-password" required data-msg="Enter your password." aria-describedby="cl-login10-l-pw-err">
                 <button class="cl-login10__eye" type="button" aria-label="Show password" aria-pressed="false" aria-controls="cl-login10-l-pw" data-pw-toggle>
                   <svg class="cl-login10__eye-on" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
                   <svg class="cl-login10__eye-off" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18M10.6 5.1A10.8 10.8 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.1M6.6 6.6C3.9 8.3 2 12 2 12s3.6 7 10 7a9.8 9.8 0 0 0 5.4-1.6M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
