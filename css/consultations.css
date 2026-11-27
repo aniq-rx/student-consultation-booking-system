@@ -1,0 +1,23 @@
+.tabs-bar { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+.tab-btn {
+  padding: 8px 16px; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--text-muted); font-weight: 600; font-size: 0.86rem; text-decoration: none;
+}
+.tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+.consultations-list { display: flex; flex-direction: column; gap: 14px; }
+.consultation-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 18px 20px; box-shadow: var(--shadow); display: flex; justify-content: space-between;
+  align-items: flex-start; gap: 16px; flex-wrap: wrap;
+}
+.consultation-main { flex: 1; min-width: 260px; display: flex; flex-direction: column; gap: 6px; }
+.consultation-header { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.consultation-topic { font-weight: 700; font-size: 1.02rem; }
+.consultation-meta { font-size: 0.87rem; color: var(--text-muted); }
+.remark-box {
+  margin-top: 6px; padding: 8px 12px; border-radius: 8px; font-size: 0.84rem;
+  background: var(--surface-subtle); border-left: 3px solid var(--primary);
+}
+.remark-box.rejected { background: #fef2f2; border-left-color: var(--danger); color: #991b1b; }
+.consultation-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }

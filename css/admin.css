@@ -1,0 +1,28 @@
+.breakdown-list { display: flex; flex-direction: column; gap: 14px; }
+.breakdown-head { display: flex; justify-content: space-between; font-size: 0.88rem; margin-bottom: 6px; }
+.progress-track { width: 100%; height: 10px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 999px; }
+.bar-success { background: var(--success); }
+.bar-warning { background: #d97706; }
+.bar-info { background: var(--info); }
+.bar-danger { background: var(--danger); }
+
+.admin-form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.admin-form-grid .form-group { margin-bottom: 0; }
+
+.admin-filter-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 14px;
+  align-items: end;
+}
+.admin-filter-row .form-group { margin-bottom: 0; }
+.role-filter-links { display: flex; gap: 6px; flex-wrap: wrap; }
+
+@media (max-width: 960px) {
+  .admin-form-grid, .admin-filter-row { grid-template-columns: 1fr; }
+}
